@@ -13,6 +13,7 @@ import_lines = []
 from_import_lines = []
 all_import_indexes = []
 
+# Get which lines are import lines and which are static imports
 for lindex in range(0, len(file_lines)):
     line = file_lines[lindex]
     if line.startswith("import"):
@@ -22,16 +23,17 @@ for lindex in range(0, len(file_lines)):
         from_import_lines.append(line)
         all_import_indexes.append(lindex)
         
-
+# Sort the import lines by length and then alphabetically
 import_lines = sorted(import_lines, key=lambda x: (len(x), x))
 from_import_lines = sorted(from_import_lines, key=lambda x: (len(x), x))
 
-# sort the indexes to get the range
+# Get the range of lines to replace
 start, stop = all_import_indexes[0], all_import_indexes[-1]
 
+# Recalculate the file_lines with the ordered import lines
 file_lines = file_lines[:start] + import_lines + ['\n' if len(from_import_lines) > 0 else ''] + from_import_lines + file_lines[stop + 1:]
 
-
+# Save the pretty new file
 with open(file_path, 'w') as f:
     for line in file_lines:
         f.write(line)
