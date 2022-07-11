@@ -5,7 +5,7 @@ import sys
 file_path = sys.argv[1]
 
 # Open and read the file lines
-with open(file_path, 'r') as f:
+with open(file_path, "r") as f:
     file_lines = f.readlines()
 
 
@@ -22,7 +22,7 @@ for lindex in range(0, len(file_lines)):
     elif line.startswith("from"):
         from_import_lines.append(line)
         all_import_indexes.append(lindex)
-        
+
 # Sort the import lines by length and then alphabetically
 import_lines = sorted(import_lines, key=lambda x: (len(x), x))
 from_import_lines = sorted(from_import_lines, key=lambda x: (len(x), x))
@@ -31,9 +31,15 @@ from_import_lines = sorted(from_import_lines, key=lambda x: (len(x), x))
 start, stop = all_import_indexes[0], all_import_indexes[-1]
 
 # Recalculate the file_lines with the ordered import lines
-file_lines = file_lines[:start] + import_lines + ['\n' if len(from_import_lines) > 0 else ''] + from_import_lines + file_lines[stop + 1:]
+file_lines = (
+    file_lines[:start]
+    + import_lines
+    + ["\n" if len(from_import_lines) > 0 else ""]
+    + from_import_lines
+    + file_lines[stop + 1 :]
+)
 
 # Save the pretty new file
-with open(file_path, 'w') as f:
+with open(file_path, "w") as f:
     for line in file_lines:
         f.write(line)
